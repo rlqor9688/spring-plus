@@ -9,8 +9,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 jwt:
   secret:
-    key: dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2p3dF9zZWNyZXRfa2V5XzIwMjU=
+    key: and0X3N1cGVyX3NlY3VyZV9rZXlfMjAyNV8kM2NVcjNAlndU
