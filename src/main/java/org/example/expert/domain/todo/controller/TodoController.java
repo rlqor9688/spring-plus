@@ -41,8 +41,8 @@ public class TodoController {
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate
     ) {
-        LocalDateTime start = toStartOfDay(startDate);
-        LocalDateTime end = toEndOfDay(endDate);
+        LocalDateTime start = (startDate != null) ? toStartOfDay(startDate) : null;
+        LocalDateTime end = (endDate != null) ? toEndOfDay(endDate): LocalDateTime.now();
         return ResponseEntity.ok(todoService.getTodos(page, size, weather, start, end));
     }
 
