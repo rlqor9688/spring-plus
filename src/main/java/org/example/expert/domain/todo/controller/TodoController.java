@@ -7,6 +7,7 @@ import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSummaryResponseDto;
 import org.example.expert.domain.todo.service.TodoService;
 import org.example.expert.security.CustomUserPrincipal;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,20 @@ public class TodoController {
         LocalDateTime start = (startDate != null) ? toStartOfDay(startDate) : null;
         LocalDateTime end = (endDate != null) ? toEndOfDay(endDate): LocalDateTime.now();
         return ResponseEntity.ok(todoService.getTodos(page, size, weather, start, end));
+    }
+
+    @GetMapping("/todos/search")
+    public ResponseEntity<Page<TodoSummaryResponseDto>> searchTodos(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String nickname
+    ) {
+        LocalDateTime start = (startDate!= null) ? toStartOfDay(startDate) : null;
+        LocalDateTime end = (endDate !=null) ? toEndOfDay(endDate) : LocalDateTime.now();
+        return ResponseEntity.ok(todoService.searchTodos(page, size, title, start, end, nickname));
     }
 
     private LocalDateTime toStartOfDay(String dateStr) {
