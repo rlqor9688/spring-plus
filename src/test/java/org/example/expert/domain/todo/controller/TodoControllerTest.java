@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 
 @WebMvcTest(TodoController.class)
 class TodoControllerTest {
@@ -52,7 +54,9 @@ class TodoControllerTest {
         when(todoService.getTodo(todoId)).thenReturn(response);
 
         // then
-        mockMvc.perform(get("/todos/{todoId}", todoId))
+        mockMvc.perform(get("/todos/{todoId}", todoId)
+                        .with(user("email").roles("USER"))
+                        .accept(MediaType.APPLICATION_JSON)) // 인증된 사용자로 요청
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(todoId))
                 .andExpect(jsonPath("$.title").value(title));
@@ -68,7 +72,8 @@ class TodoControllerTest {
                 .thenThrow(new InvalidRequestException("Todo not found"));
 
         // then
-        mockMvc.perform(get("/todos/{todoId}", todoId))
+        mockMvc.perform(get("/todos/{todoId}", todoId)
+                        .with(user("email").roles("USER")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400))

@@ -1,6 +1,5 @@
 package org.example.expert.domain.todo.controller;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -69,7 +68,6 @@ public class TodoController {
         } catch (DateTimeException e) {
             throw new IllegalArgumentException("날짜 형식이 잘못되었습니다. yyyy-MM-dd 형식을 사용하세요.");
         }
-
     }
 
     private LocalDateTime toEndOfDay(String dateStr) {
@@ -78,7 +76,6 @@ public class TodoController {
         } catch (DateTimeException e) {
             throw new IllegalArgumentException("날짜 형식이 잘못되었습니다. yyyy-MM-dd 형식을 사용하세요.");
         }
-
     }
 
     @GetMapping("/todos/{todoId}")
